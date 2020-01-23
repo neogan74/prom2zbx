@@ -52,9 +52,9 @@ type LLD struct {
 }
 
 //GetRules ...
-func GetRules() {
+func GetRules(pUrl string) {
 
-	resp, err := http.Get("http://192.168.33.11/rules.html")
+	resp, err := http.Get(pUrl + "/api/v1/rules")
 	if err != nil {
 		fmt.Errorf("Error while get targets: %v\n", err)
 		os.Exit(1)
