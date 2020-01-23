@@ -1,7 +1,12 @@
-package prom4zbx
-
+package prom
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"strings"
 	"time"
 )
 
@@ -30,7 +35,7 @@ type TargetsList struct {
 	} `json:"data"`
 }
 
-func getTargetsProm2LLD() {
+func GetTargetsProm2LLD() {
 
 	resp, err := http.Get("http://192.168.33.11/targets.html")
 	if err != nil {
