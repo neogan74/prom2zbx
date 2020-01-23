@@ -35,9 +35,9 @@ type TargetsList struct {
 	} `json:"data"`
 }
 
-func GetTargetsProm2LLD() {
+func GetTargetsProm2LLD(pUrl, prefix string) {
 
-	resp, err := http.Get("http://192.168.33.11/targets.html")
+	resp, err := http.Get(pUrl + "/api/v1/targets")
 	if err != nil {
 		fmt.Errorf("Error while get targets: %v\n", err)
 		os.Exit(1)
@@ -75,8 +75,8 @@ func GetTargetsProm2LLD() {
 		}
 		// fmt.Println(tmp)
 		targname := tmp
-		targets = append(targets, v.Labels.Job+"."+targname)
-		targetid := target{Name: v.Labels.Job + "." + targname,
+		targets = append(targets, prefix+"_"+targname+"."+v.Labels.Job)
+		targetid := target{Name: prefix + "_" + targname + "." + v.Labels.Job,
 			ZTag: v.Labels.Job}
 		lldres.Res = append(lldres.Res, targetid)
 	}
