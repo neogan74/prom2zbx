@@ -20,11 +20,15 @@ func main() {
 		prom.GetRules(*promURL)
 	case "listen":
 		alerts.ListenAlerts()
-
-
+	case "test":
+		test()
 	}
 	// _, err := http.NewRequest("POST", "http://127.0.0.1:10055", strings.NewReader(alertOK))
 	// if err != nil {
 	// 	fmt.Errorf("%v", err)
 	// }
+}
+
+func test() {
+
 }
