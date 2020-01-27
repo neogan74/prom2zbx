@@ -71,8 +71,10 @@ func NewSender(host string, port int) *Zsender {
 	return s
 }
 
+const tcpProtocol = byte(0x01)
+
 func (zs *Zsender) getHeader() []byte {
-	return []byte("ZBXD\\x01")
+	return []byte{'Z', 'B', 'X', 'D', tcpProtocol}
 }
 
 func (zs *Zsender) getTCPAddr() (ipaddr *net.TCPAddr, err error) {
@@ -139,6 +141,7 @@ func (zs *Zsender) Send(packet *ZbxPacket) (res []byte, err error) {
 	buffer := append(zs.getHeader(), packet.DataLen()...)
 	buffer = append(buffer, dataPacket...)
 
+	fmt.Printf("res: %v\n", string(buffer))
 	_, err = conn.Write(buffer)
 	if err != nil {
 		err = fmt.Errorf("Error while sending the data: %s", err.Error())
@@ -146,6 +149,7 @@ func (zs *Zsender) Send(packet *ZbxPacket) (res []byte, err error) {
 	}
 
 	res, err = zs.read(conn)
+	fmt.Printf("res: %v\n", res)
 
 	return
 

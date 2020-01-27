@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
+
+	"prom2zbx.com/internal/zbxsender"
 )
 
 const alertOK = `{  
@@ -91,5 +94,25 @@ func HandlePost(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "missing fields in request body", http.StatusBadRequest)
 		return
 	}
+
+	r.URL.Hostname()
+
+	fmt.Println(req.CommonLabels["severity"] + "[" + req.Alerts[0].Labels["alertname"] + "]")
+	var data []*zbxsender.Metric
+	data = append(data, zbxsender.NewMetric("test", "trap", "0"))
+	data = append(data, zbxsender.NewMetric("test", "trap", "1"))
+	fmt.Println(data)
+	pkg := zbxsender.NewPacket(data, time.Now().Unix())
+	fmt.Println(pkg)
+
+	zsnd := zbxsender.NewSender("51.15.213.9", 10144)
+	res, err := zsnd.Send(pkg)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(res)
+
 	fmt.Printf("Request %v\n\n", req)
+	fmt.Printf("Request %v\n\n", req.Receiver)
+	fmt.Printf("Request %v\n\n", r.RemoteAddr)
 }
