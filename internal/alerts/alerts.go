@@ -96,11 +96,12 @@ func HandlePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.URL.Hostname()
-
-	fmt.Println(req.CommonLabels["severity"] + "[" + req.Alerts[0].Labels["alertname"] + "]")
+	m1 := req.CommonLabels["severity"] + "[" + req.Alerts[0].Labels["alertname"] + "]"
+	m2 := req.CommonLabels["severity"] + ".summary[" + req.Alerts[0].Labels["alertname"] + "]"
+	fmt.Println()
 	var data []*zbxsender.Metric
-	data = append(data, zbxsender.NewMetric("test", "trap", "0"))
-	data = append(data, zbxsender.NewMetric("test", "trap", "1"))
+	data = append(data, zbxsender.NewMetric("Promth", m1, "1"))
+	data = append(data, zbxsender.NewMetric("Promth", m2, req.Alerts[0].Annotations["summary"]))
 	fmt.Println(data)
 	pkg := zbxsender.NewPacket(data, time.Now().Unix())
 	fmt.Println(pkg)
