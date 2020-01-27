@@ -99,8 +99,12 @@ func HandlePost(w http.ResponseWriter, r *http.Request) {
 	m1 := req.CommonLabels["severity"] + "[" + req.Alerts[0].Labels["alertname"] + "]"
 	m2 := req.CommonLabels["severity"] + ".summary[" + req.Alerts[0].Labels["alertname"] + "]"
 	fmt.Println()
+	problem := "1"
 	var data []*zbxsender.Metric
-	data = append(data, zbxsender.NewMetric("Promth", m1, "1"))
+	if req.Status == "resolved" {
+		problem = "0"
+	}
+	data = append(data, zbxsender.NewMetric("Promth", m1, problem))
 	data = append(data, zbxsender.NewMetric("Promth", m2, req.Alerts[0].Annotations["summary"]))
 	fmt.Println(data)
 	pkg := zbxsender.NewPacket(data, time.Now().Unix())
