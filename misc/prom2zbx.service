@@ -1,0 +1,8 @@
+[Unit]
+Description= Prometheus alerts to Zabbix integration
+
+[Service]
+ExecStart=/opt/prom2zbx --mode listen >> /tmp/alerts.list
+
+[Install]
+WantedBy=multi-user.target
