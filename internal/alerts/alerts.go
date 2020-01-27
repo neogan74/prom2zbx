@@ -114,5 +114,5 @@ func HandlePost(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Request %v\n\n", req)
 	fmt.Printf("Request %v\n\n", req.Receiver)
-	fmt.Printf("Request %v\n\n", r.RemoteAddr)
+	fmt.Printf("rem addr %v\n\n", r.RemoteAddr)
 }
