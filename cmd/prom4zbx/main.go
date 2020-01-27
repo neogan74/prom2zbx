@@ -3,7 +3,9 @@ package main
 import (
 	"flag"
 
+	"prom2zbx.com/internal/alerts"
 	"prom2zbx.com/internal/prom"
+	// "prom2zbx.com/internal/zbxsender"
 )
 
 func main() {
@@ -16,8 +18,11 @@ func main() {
 		prom.GetTargetsProm2LLD(*promURL, *prefix)
 	case "rules":
 		prom.GetRules(*promURL)
+	case "listen":
+		alerts.ListenAlerts()
+
+
 	}
-	// alerts.ListenAlerts()
 	// _, err := http.NewRequest("POST", "http://127.0.0.1:10055", strings.NewReader(alertOK))
 	// if err != nil {
 	// 	fmt.Errorf("%v", err)
