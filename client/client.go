@@ -35,7 +35,7 @@ func main() {
 		{\n
 			\"labels\": {\n
 			\"alertname\": \"InstanceDown\",\n
-			\"instance\": \"RMRUMOWLSPBIAS5.web.rru02.vwgroup.com\",\n
+			\"instance\": \"ABCDEFABDSDWDP02.web.abc02.domain.com\",\n
 			\"job\": \"node_exporter\",\n
 			\"severity\": \"critical\"\n
 		},\n
