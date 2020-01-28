@@ -40,7 +40,8 @@ type RulesStruct struct {
 
 //Rule ...
 type Rule struct {
-	Name string `json:"{#RNAME}"`
+	Name  string `json:"{#RNAME}"`
+	Query string `json:"{#RQUERY}"`
 }
 
 //Rules ...
@@ -85,17 +86,11 @@ func GetRules(pUrl string) {
 			if contains(names[vv.Labels.Severity], vv.Name) {
 				continue
 			}
-			RRules[vv.Labels.Severity] = append(RRules[vv.Labels.Severity], Rule{Name: vv.Name})
+			RRules[vv.Labels.Severity] = append(RRules[vv.Labels.Severity], Rule{Name: vv.Name, Query: vv.Query})
 			names[vv.Labels.Severity] = append(names[vv.Labels.Severity], vv.Name)
 		}
 	}
-	// fmt.Println(len(names))
-	// for k := range names {
-	// 	// fmt.Printf("Key: %v = %v len=%v\n\n", k, len(names[k]), names[k])
-	// }
-	// fmt.Println(RRules)
 	final, _ := json.Marshal(RRules)
-	// fmt.Println("keys %v %v", len(RRules))
 	fmt.Println(string(final))
 
 }
