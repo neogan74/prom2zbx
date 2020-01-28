@@ -11,6 +11,8 @@ import (
 )
 
 func main() {
+	if flag.NArgs()
+
 	promURL := flag.String("promURL", "", "Prometheus URL")
 	mode := flag.String("mode", "targets", "Mode: targets or rules")
 	prefix := flag.String("prefix", "TEST", "Prefix for avoid duplicates")
@@ -28,11 +30,11 @@ func main() {
 }
 
 func test() {
-	testcase := []byte(`RMRUMOWLSPBIAS5.web.rru02.vwgroup.com`)
-	testcase2 := []byte(`RMRUMOWLSPBIMO1.web.rru02.vwgroup.com:9090`)
-	testcase3 := []byte(`RMRUMOWLSPBIMO2.web.rru02.vwgroup.com:9090`)
-	testcase4 := []byte(`RMRUMOWLSPBIMP1.web.rru02.vwgroup.com:9090`)
-	testcase5 := []byte(`RMRUMOWLSPBIMP2.web.rru02.vwgroup.com:9090`)
+	testcase := []byte(`ABCDEFABDSDWDO5`)
+	testcase2 := []byte(`ABCDEFABDSDWDO1.web.test.domain.com:9090`)
+	testcase3 := []byte(`ABCDEFABDSDWDO2.web.test.domain.com:9090`)
+	testcase4 := []byte(`ABCDEFABDSDWDP1.web.test.domain.com:9090`)
+	testcase5 := []byte(`ABCDEFABDSDWDP2.web.test.domain.com:9090`)
 
 	re := regexp.MustCompile("([A-Z0-9]+)")
 	res := string(re.Find(testcase))
