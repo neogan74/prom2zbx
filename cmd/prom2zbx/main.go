@@ -3,19 +3,64 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	"regexp"
 
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"prom2zbx.com/internal/alerts"
 	"prom2zbx.com/internal/prom"
 	// "prom2zbx.com/internal/zbxsender"
 )
 
+var (
+	// Used for flags
+	cfgFile  string
+	prom2zbx = &cobra.Command{
+		Use:   "prom2zbx",
+		Short: "Integration prometheus alerts to zabbix and back",
+		Long: `Service/tool for intergation alerts from alert manager 
+			   notifications to zabbix and back`,
+	}
+)
+
+func Execute() error {
+	return prom2zbx.Execute()
+}
+
+func init() {
+	cobra.OnInitialize(initConfig)
+
+	prom2zbx.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is ./prom2zbx.yaml)")
+	viper.BindPFlag("promURL", prom2zbx.PersistentFlags().Lookup("promURL"))
+	viper.BindPFlag("mode", prom2zbx.PersistentFlags().Lookup("mode"))
+}
+
+func initConfig() {
+	if cfgFile != "" {
+		viper.SetConfigFile(cfgFile)
+	} else {
+		home, err := os.UserHomeDir()
+		cobra.CheckErr(err)
+
+		viper.AddConfigPath(home)
+		viper.SetConfigType("yaml")
+		viper.SetConfigName("prom2zbx")
+	}
+
+	viper.AutomaticEnv()
+
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	}
+}
+
 func main() {
-	if flag.NArgs()
 
 	promURL := flag.String("promURL", "", "Prometheus URL")
 	mode := flag.String("mode", "targets", "Mode: targets or rules")
 	prefix := flag.String("prefix", "TEST", "Prefix for avoid duplicates")
+	help := flag.String("help", "help", "show help")
 	flag.Parse()
 	switch *mode {
 	case "targets":
@@ -27,6 +72,7 @@ func main() {
 	case "test":
 		test()
 	}
+	usage := ""
 }
 
 func test() {
