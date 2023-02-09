@@ -1,7 +1,6 @@
-package main
+package prom2zbx
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"regexp"
@@ -15,7 +14,11 @@ import (
 
 var (
 	// Used for flags
-	cfgFile  string
+	cfgFile string
+	mode    string
+	promURL string
+	prefix  string
+
 	prom2zbx = &cobra.Command{
 		Use:   "prom2zbx",
 		Short: "Integration prometheus alerts to zabbix and back",
@@ -32,8 +35,9 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	prom2zbx.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is ./prom2zbx.yaml)")
-	viper.BindPFlag("promURL", prom2zbx.PersistentFlags().Lookup("promURL"))
-	viper.BindPFlag("mode", prom2zbx.PersistentFlags().Lookup("mode"))
+	prom2zbx.PersistentFlags().StringVar(&promURL, "promURL", "", "URL for conenction to prometheus")
+	prom2zbx.PersistentFlags().StringVar(&mode, "mode", "targets", "mode for sync prometheus targets or rules ")
+	prom2zbx.PersistentFlags().StringVar(&prefix, "prefix", "TEST", "to avoid duplicates some host will have this prefix")
 }
 
 func initConfig() {
@@ -57,22 +61,16 @@ func initConfig() {
 
 func main() {
 
-	promURL := flag.String("promURL", "", "Prometheus URL")
-	mode := flag.String("mode", "targets", "Mode: targets or rules")
-	prefix := flag.String("prefix", "TEST", "Prefix for avoid duplicates")
-	help := flag.String("help", "help", "show help")
-	flag.Parse()
-	switch *mode {
+	switch mode {
 	case "targets":
-		prom.GetTargetsProm2LLD(*promURL, *prefix)
+		prom.GetTargetsProm2LLD(promURL, prefix)
 	case "rules":
-		prom.GetRules(*promURL)
+		prom.GetRules(promURL)
 	case "listen":
 		alerts.ListenAlerts()
 	case "test":
 		test()
 	}
-	usage := ""
 }
 
 func test() {
